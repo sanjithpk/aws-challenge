@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 function App() {
   const [textInput, setTextInput] = useState("");
   const [fileInput, setFileInput] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>("No file chosen");
-  // const bucketName = "fovus-txt-store";
+  const bucketName = import.meta.env.VITE_S3_BUCKET!;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -15,9 +16,38 @@ function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("Text Input:", textInput);
     if (fileInput) {
-      console.log(fileInput.name);
+      const s3 = new S3Client({
+        region: import.meta.env.VITE_AWS_REGION,
+        credentials: {
+          accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+          secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+        },
+      });
+
+      const putObjectCommand = new PutObjectCommand({
+        Bucket: bucketName,
+        Key: fileName,
+        Body: fileInput,
+      });
+
+      const body = {
+        input_text: textInput,
+        input_file_path: `https://${bucketName}.s3.amazonaws.com/${fileName}`,
+      };
+
+      try {
+        await s3.send(putObjectCommand);
+        console.log(`File uploaded: ${bucketName}/${fileName}`);
+        let response = await fetch(import.meta.env.VITE_INVOKE_URL, {
+          method: "POST",
+          body: JSON.stringify(body),
+        });
+        response = await response.json();
+        console.log(response);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
   };
 
