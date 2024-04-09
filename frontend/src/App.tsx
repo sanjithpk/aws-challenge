@@ -5,6 +5,7 @@ function App() {
   const [textInput, setTextInput] = useState("");
   const [fileInput, setFileInput] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>("No file chosen");
+  const [feedback, setFeedback] = useState({ message: "", color: "green" });
   const bucketName = import.meta.env.VITE_S3_BUCKET!;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,16 +45,34 @@ function App() {
           body: JSON.stringify(body),
         });
         response = await response.json();
-        console.log(response);
+        if (response.status === 200) {
+          setFeedback({
+            message: "File uploaded successfully!",
+            color: "green",
+          });
+        } else {
+          setFeedback({ message: "Error uploading file.", color: "red" });
+        }
       } catch (error) {
         console.error("Error uploading file:", error);
       }
+
+      setTimeout(() => setFeedback({ message: "", color: "green" }), 1000);
     }
   };
 
   return (
     <>
       <div className="flex justify-center items-center h-screen bg-gray-50">
+        {feedback.message && (
+          <div
+            className={`absolute top-20 text-white px-4 py-2 rounded-md ${
+              feedback.color === "green" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {feedback.message}
+          </div>
+        )}
         <form
           onSubmit={handleSubmit}
           className="p-6 bg-white shadow-lg rounded-lg"
@@ -69,6 +88,7 @@ function App() {
               type="text"
               id="textInput"
               value={textInput}
+              required
               onChange={(e) => setTextInput(e.target.value)}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
@@ -81,8 +101,8 @@ function App() {
             >
               File Input
             </label>
-            <div className="mt-1 flex justify-center items-center">
-              <div className="relative flex items-center justify-center cursor-pointer">
+            <div className="mt-1 flex items-center w-full">
+              <div className="relative flex items-center justify-center cursor-pointer flex-grow-0 flex-shrink-0">
                 <button
                   type="button"
                   className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-l-md focus:outline-none"
@@ -93,11 +113,12 @@ function App() {
                 <input
                   type="file"
                   id="fileInput"
+                  required
                   onChange={handleFileChange}
-                  className="absolute inset-0 w-full h-full opacity-0"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
               </div>
-              <div className="flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-white text-gray-600 text-sm">
+              <div className="flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-white text-gray-600 text-sm flex-grow flex-shrink min-w-0">
                 {fileName}
               </div>
             </div>

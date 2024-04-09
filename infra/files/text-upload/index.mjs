@@ -24,8 +24,8 @@ export const handler = async (event) => {
   try {
     await docClient.send(new PutCommand(params));
     return {
-      statusCode: 200,
-      body: JSON.stringify({ id }),
+      status: 200,
+      body: id,
     };
   } catch (error) {
     console.error(error);

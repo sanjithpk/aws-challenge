@@ -10,7 +10,7 @@ VITE_S3_BUCKET=fovus-text-store
 VITE_INVOKE_URL=<your_invoke_url>
 ```
 
-Get the API Gateway invoke url in the console
+Get the API Gateway invoke url in the AWS console for fovus-api
 
 Run the development server using
 
