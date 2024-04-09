@@ -36,7 +36,7 @@ table.update_item(
     Key={'id': record_id},
     UpdateExpression='SET output_file_path = :val1',
     ExpressionAttributeValues={
-        ':val1': f's3://{bucket_name}/{output_file_name}'
+        ':val1': f'https://{bucket_name}.s3.amazonaws.com/{output_file_name}'
     }
 )
 
