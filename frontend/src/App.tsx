@@ -57,7 +57,7 @@ function App() {
         console.error("Error uploading file:", error);
       }
 
-      setTimeout(() => setFeedback({ message: "", color: "green" }), 1000);
+      setTimeout(() => setFeedback({ message: "", color: "green" }), 5000);
     }
   };
 

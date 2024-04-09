@@ -10,6 +10,8 @@ Deploy the infrastructure using
 cdk deploy
 ```
 
+Make sure to upload `script.py` in files/ either directly through s3 or using the frontend
+
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 ## Useful commands
