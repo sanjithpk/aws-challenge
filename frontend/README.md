@@ -12,6 +12,12 @@ VITE_INVOKE_URL=<your_invoke_url>
 
 Get the API Gateway invoke url in the AWS console for fovus-api
 
+Upload the script.py to s3 using, make sure to change it your desired aws profile. default profile is 'default'
+
+```
+node scripts/upload.js
+```
+
 Run the development server using
 
 ```
