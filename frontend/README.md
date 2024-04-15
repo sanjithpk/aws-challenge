@@ -1,5 +1,10 @@
 # React + TypeScript + Vite
 
+Navigate to this repository
+```
+cd frontend
+```
+
 Create a .env file with
 
 ```
