@@ -1,5 +1,11 @@
 # Infra
 
+Navigate to this repository and install node modules
+```
+cd infra
+npm i
+```
+
 ## Setup AWS CDK
 
 <https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html#getting_started_install>
